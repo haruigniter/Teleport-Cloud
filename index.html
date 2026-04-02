@@ -3,29 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Teleport-Cloud サービス全体像</title>
+<title>Teleport-Cloud サービス全体像 v4</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+  :root {
+    --bg: #f0f4f8;
+    --white: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --text-mid: #475569;
+    --text-dim: #94a3b8;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Noto Sans JP', sans-serif;
+
+    --navy: #0a1628;
+    --navy-mid: #0d2240;
+    --blue: #0077b6;
+    --cyan: #00d4ff;
+    --green: #00c896;
+    --amber: #f6ad55;
+    --purple: #a78bfa;
+    --red: #fc8181;
+
+    /* Layer 2 sub-colors */
+    --2a-color: #00c896;
+    --2a-bg: #071a0e;
+    --2a-border: #1a5c36;
+
+    --2b-color: #a78bfa;
+    --2b-bg: #120d20;
+    --2b-border: #4a2d8e;
+
+    --2c-color: #00d4ff;
+    --2c-bg: #071828;
+    --2c-border: #1a4a6e;
+
+    --2d-color: #f6ad55;
+    --2d-bg: #1a1200;
+    --2d-border: #5a3a00;
+  }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: #f0f4f8;
-    font-family: 'Noto Sans JP', sans-serif;
-    min-height: 100vh;
-    padding: 40px 32px 60px;
+    background: var(--bg);
+    font-family: var(--sans);
+    padding: 40px 28px 60px;
+    color: var(--text);
   }
 
   .page { max-width: 1060px; margin: 0 auto; }
 
   /* HEADER */
-  .header { margin-bottom: 36px; }
+  .header { margin-bottom: 32px; }
   .header-eyebrow {
-    font-size: 11px; font-weight: 500; letter-spacing: 0.15em;
-    color: #0077b6; text-transform: uppercase; margin-bottom: 8px;
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 8px;
   }
-  .header h1 { font-size: 26px; font-weight: 700; color: #0a1628; margin-bottom: 6px; }
-  .header p { font-size: 13px; color: #4a5568; line-height: 1.7; max-width: 680px; }
+  .header h1 { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .header p { font-size: 12px; color: var(--text-mid); line-height: 1.7; max-width: 700px; }
 
   /* DIAGRAM */
   .diagram { display: flex; flex-direction: column; gap: 5px; }
@@ -35,103 +73,133 @@
     display: flex; align-items: center; justify-content: center;
     gap: 8px; padding: 3px 0;
   }
-  .arrow span { font-size: 11px; color: #94a3b8; }
+  .arrow span { font-size: 10px; color: var(--text-dim); font-family: var(--mono); }
 
   /* LAYER BASE */
-  .layer { border-radius: 12px; padding: 20px 24px; border: 2px solid; }
+  .layer { border-radius: 12px; padding: 18px 22px; border: 2px solid; }
   .layer-tag {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
-    text-transform: uppercase; margin-bottom: 3px;
+    font-family: var(--mono); font-size: 9px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 3px;
   }
-  .layer-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
-  .layer-desc { font-size: 12px; line-height: 1.7; margin-bottom: 14px; color: #4a5568; }
+  .layer-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .layer-desc { font-size: 11px; line-height: 1.65; margin-bottom: 12px; color: var(--text-mid); }
 
   /* chips */
-  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip {
-    font-size: 12px; font-weight: 500; padding: 5px 13px;
+    font-size: 10px; font-weight: 500; padding: 4px 11px;
     border-radius: 20px; border: 1px solid;
-    display: flex; align-items: center; gap: 5px;
+    display: flex; align-items: center; gap: 4px;
   }
 
-  /* ── DEVICES ── */
-  .l-devices { background: #fff; border-color: #bee3f8; }
-  .l-devices .layer-tag { color: #0077b6; }
-  .l-devices .layer-title { color: #0a1628; }
-  .l-devices .chip { background: #ebf8ff; color: #0077b6; border-color: #bee3f8; }
+  /* ── DEVICE LAYER ── */
+  .l-devices { background: var(--white); border-color: #bee3f8; }
+  .l-devices .layer-tag { color: var(--blue); }
+  .l-devices .layer-title { color: var(--text); }
+  .l-devices .chip { background: #ebf8ff; color: var(--blue); border-color: #bee3f8; }
 
-  /* ── PLATFORM ── */
-  .l-platform {
-    background: linear-gradient(135deg, #0a1628 0%, #0d2240 100%);
-    border-color: #2d5a8e;
-    box-shadow: 0 8px 32px rgba(0,119,182,0.18);
+  /* ── PLATFORM WRAPPER ── */
+  .l-platform-wrapper {
+    background: linear-gradient(135deg, #060f1e 0%, #0a1a30 100%);
+    border: 2px solid #1e3a5f;
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 8px 40px rgba(0,119,182,0.18);
   }
-  .l-platform .layer-tag { color: #00d4ff; }
-  .l-platform .layer-title { color: #fff; }
-  .l-platform .layer-desc { color: #94a3b8; }
+  .platform-header { margin-bottom: 14px; }
+  .platform-tag {
+    font-family: var(--mono); font-size: 9px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 3px;
+  }
+  .platform-title { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+  .platform-desc { font-size: 11px; color: #64748b; line-height: 1.6; }
 
-  .platform-grid {
+  /* sub-layer grid */
+  .sub-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
-    gap: 8px; margin-bottom: 12px;
-  }
-  .platform-item {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px; padding: 10px 12px;
-  }
-  .platform-item-name { font-size: 12px; font-weight: 600; color: #e2e8f0; margin-bottom: 2px; }
-  .platform-item-desc { font-size: 11px; color: #64748b; line-height: 1.4; }
-
-  .livekit-bar {
-    background: rgba(0,255,136,0.07);
-    border: 1px solid rgba(0,255,136,0.2);
-    border-radius: 8px; padding: 8px 14px; margin-bottom: 8px;
-    font-size: 11px; color: #6ee7b7;
-    font-family: 'IBM Plex Mono', monospace;
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  }
-  .livekit-bar .lk-label {
-    background: rgba(0,255,136,0.15); border-radius: 4px;
-    padding: 2px 8px; font-weight: 600; color: #00ff88;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 
-  .ownership-bar {
-    background: rgba(0,212,255,0.07);
-    border: 1px solid rgba(0,212,255,0.18);
-    border-radius: 8px; padding: 8px 14px;
-    font-size: 11px; color: #7dd3fc;
-    font-family: 'IBM Plex Mono', monospace;
-    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  /* SUB LAYER */
+  .sub-layer {
+    border-radius: 10px; border: 1px solid;
+    padding: 13px 15px;
   }
-  .ownership-bar .sep { color: rgba(0,212,255,0.35); }
+  .sub-layer-tag {
+    font-family: var(--mono); font-size: 8px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sub-layer-title { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+  .sub-layer-desc { font-size: 10px; line-height: 1.55; margin-bottom: 8px; }
+  .sub-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .sub-chip {
+    font-size: 9px; font-weight: 500; padding: 2px 8px;
+    border-radius: 20px; border: 1px solid;
+  }
 
-  /* ── APPS ── */
-  .l-apps { background: #fff; border-color: #c6f6d5; }
+  /* 2-A Core */
+  .sub-2a { background: var(--2a-bg); border-color: var(--2a-border); }
+  .sub-2a .sub-layer-tag { color: var(--2a-color); }
+  .sub-2a .sub-layer-title { color: var(--white); }
+  .sub-2a .sub-layer-desc { color: #64748b; }
+  .sub-2a .sub-chip { background: rgba(0,200,150,0.1); color: var(--2a-color); border-color: var(--2a-border); }
+
+  /* 2-B AI Infra */
+  .sub-2b { background: var(--2b-bg); border-color: var(--2b-border); }
+  .sub-2b .sub-layer-tag { color: var(--2b-color); }
+  .sub-2b .sub-layer-title { color: var(--white); }
+  .sub-2b .sub-layer-desc { color: #64748b; }
+  .sub-2b .sub-chip { background: rgba(167,139,250,0.1); color: var(--2b-color); border-color: var(--2b-border); }
+
+  /* 2-C AI Gateway */
+  .sub-2c { background: var(--2c-bg); border-color: var(--2c-border); }
+  .sub-2c .sub-layer-tag { color: var(--2c-color); }
+  .sub-2c .sub-layer-title { color: var(--white); }
+  .sub-2c .sub-layer-desc { color: #64748b; }
+  .sub-2c .sub-chip { background: rgba(0,212,255,0.1); color: var(--2c-color); border-color: var(--2c-border); }
+
+  /* 2-D Knowledge */
+  .sub-2d { background: var(--2d-bg); border-color: var(--2d-border); }
+  .sub-2d .sub-layer-tag { color: var(--2d-color); }
+  .sub-2d .sub-layer-title { color: var(--white); }
+  .sub-2d .sub-layer-desc { color: #64748b; }
+  .sub-2d .sub-chip { background: rgba(246,173,85,0.1); color: var(--2d-color); border-color: var(--2d-border); }
+
+  /* step badge */
+  .step-badge {
+    display: inline-block; font-family: var(--mono);
+    font-size: 8px; font-weight: 700; padding: 2px 8px;
+    border-radius: 3px; margin-top: 6px;
+  }
+  .step-1 { background: rgba(167,139,250,0.2); color: var(--2b-color); }
+  .step-2 { background: rgba(0,212,255,0.2); color: var(--2c-color); }
+  .step-3 { background: rgba(0,212,255,0.15); color: #7dd3fc; }
+
+  /* ── APPS LAYER ── */
+  .l-apps { background: var(--white); border-color: #c6f6d5; }
   .l-apps .layer-tag { color: #276749; }
-  .l-apps .layer-title { color: #0a1628; }
+  .l-apps .layer-title { color: var(--text); }
 
-  .app-groups { display: flex; flex-direction: column; gap: 18px; }
-
+  .app-groups { display: flex; flex-direction: column; gap: 14px; }
   .app-group-label {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase; margin-bottom: 10px;
-    padding-bottom: 6px; border-bottom: 1px solid;
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px;
+    padding-bottom: 5px; border-bottom: 1px solid;
   }
-  .app-cards { display: flex; flex-wrap: wrap; gap: 8px; }
-
+  .app-cards { display: flex; flex-wrap: wrap; gap: 7px; }
   .app-card {
-    border-radius: 10px; padding: 12px 14px;
-    border: 1px solid; flex: 1; min-width: 145px; max-width: 215px;
+    border-radius: 9px; padding: 10px 13px; border: 1px solid;
+    flex: 1; min-width: 140px; max-width: 210px;
   }
-  .app-card-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-  .app-card-desc { font-size: 11px; color: #4a5568; line-height: 1.5; }
+  .app-card-name { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+  .app-card-desc { font-size: 10px; color: var(--text-mid); line-height: 1.45; }
   .app-card-badge {
-    font-size: 9px; font-weight: 700; padding: 2px 7px;
-    border-radius: 20px; margin-top: 7px; display: inline-block;
+    font-size: 8px; font-weight: 700; padding: 2px 6px;
+    border-radius: 20px; margin-top: 6px; display: inline-block;
   }
 
-  /* iPresence-Agent */
   .gh-agent { color: #276749; border-color: #9ae6b4; }
   .ac-guide { background: #ebf8ff; border-color: #90cdf4; }
   .ac-guide .app-card-name { color: #2b6cb0; }
@@ -146,7 +214,6 @@
   .ac-butler .app-card-name { color: #6b46c1; }
   .ac-butler .app-card-badge { background: #6b46c1; color: #fff; }
 
-  /* Space Viewer */
   .gh-viewer { color: #234e52; border-color: #81e6d9; }
   .ac-fieldview { background: #e6fffa; border-color: #81e6d9; }
   .ac-fieldview .app-card-name { color: #234e52; }
@@ -155,7 +222,6 @@
   .ac-itour .app-card-name { color: #7b341e; }
   .ac-itour .app-card-badge { background: #7b341e; color: #fff; }
 
-  /* Communication */
   .gh-comm { color: #1a365d; border-color: #bee3f8; }
   .ac-telopotalk { background: #ebf4ff; border-color: #90cdf4; }
   .ac-telopotalk .app-card-name { color: #1a365d; }
@@ -164,87 +230,67 @@
   .ac-avatarlink .app-card-name { color: #44337a; }
   .ac-avatarlink .app-card-badge { background: #44337a; color: #fff; }
 
-  /* ── USERS ── */
-  .l-users { background: #fff; border-color: #e9d8fd; }
+  /* ── USERS LAYER ── */
+  .l-users { background: var(--white); border-color: #e9d8fd; }
   .l-users .layer-tag { color: #6b46c1; }
-  .l-users .layer-title { color: #0a1628; }
-
-  .user-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .l-users .layer-title { color: var(--text); }
+  .user-row { display: flex; flex-wrap: wrap; gap: 7px; }
   .user-card {
-    border-radius: 10px; padding: 10px 16px;
-    border: 1px solid; flex: 1; min-width: 155px;
+    border-radius: 9px; padding: 9px 14px; border: 1px solid; flex: 1; min-width: 148px;
   }
-  .user-card-name { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
-  .user-card-desc { font-size: 11px; color: #4a5568; line-height: 1.4; }
+  .user-card-name { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+  .user-card-desc { font-size: 10px; color: var(--text-mid); line-height: 1.4; }
 
-  /* ── EXTERNAL ── */
-  .l-external { background: #fff; border-color: #fed7d7; }
+  /* ── EXTERNAL LAYER ── */
+  .l-external { background: var(--white); border-color: #fed7d7; }
   .l-external .layer-tag { color: #c53030; }
-  .l-external .layer-title { color: #0a1628; }
-
-  .ext-cols { display: flex; gap: 16px; flex-wrap: wrap; }
-  .ext-col { flex: 1; min-width: 180px; }
+  .l-external .layer-title { color: var(--text); }
+  .ext-cols { display: flex; gap: 14px; flex-wrap: wrap; }
+  .ext-col { flex: 1; min-width: 170px; }
   .ext-col-label {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase; color: #c53030; margin-bottom: 8px;
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: #c53030; margin-bottom: 7px;
     padding-bottom: 5px; border-bottom: 1px solid #fed7d7;
   }
-  .ext-chips { display: flex; flex-direction: column; gap: 6px; }
+  .ext-chips { display: flex; flex-direction: column; gap: 5px; }
   .ext-chip {
     background: #fff5f5; color: #c53030; border: 1px solid #fed7d7;
-    border-radius: 8px; padding: 6px 12px; font-size: 11px; font-weight: 500;
-    display: flex; align-items: center; gap: 6px;
+    border-radius: 7px; padding: 5px 11px; font-size: 10px; font-weight: 500;
+    display: flex; align-items: center; gap: 5px;
   }
 
-  /* REVENUE BOX */
-  .revenue-box {
-    margin-top: 28px;
-    background: #0a1628;
-    border: 1px solid #2d5a8e;
+  /* AI STEP LEGEND */
+  .step-legend {
+    margin-top: 24px;
+    background: var(--navy);
+    border: 1px solid #1e3a5f;
     border-radius: 12px;
-    padding: 20px 24px;
+    padding: 18px 22px;
   }
-  .revenue-title {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase; color: #00d4ff; margin-bottom: 14px;
+  .step-legend-title {
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 14px;
   }
-  .revenue-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
+  .step-legend-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
   }
-  .revenue-item {
+  .step-item {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 8px; padding: 10px 14px;
+    border-radius: 8px; padding: 12px 14px;
   }
-  .revenue-item-label { font-size: 11px; color: #94a3b8; margin-bottom: 4px; }
-  .revenue-item-value { font-size: 18px; font-weight: 700; color: #00d4ff; font-family: 'IBM Plex Mono', monospace; }
-  .revenue-item-desc { font-size: 10px; color: #64748b; margin-top: 2px; }
-  .revenue-total {
-    margin-top: 12px;
-    background: rgba(0,212,255,0.08);
-    border: 1px solid rgba(0,212,255,0.25);
-    border-radius: 8px; padding: 10px 16px;
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 8px;
+  .step-item-num {
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    margin-bottom: 5px;
   }
-  .revenue-total-label { font-size: 12px; color: #7dd3fc; font-weight: 500; }
-  .revenue-total-value { font-size: 22px; font-weight: 700; color: #fff; font-family: 'IBM Plex Mono', monospace; }
-  .revenue-note { font-size: 10px; color: #64748b; margin-top: 8px; line-height: 1.6; }
-
-  /* LEGEND */
-  .legend {
-    margin-top: 16px; background: #fff;
-    border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 22px;
+  .step-item-title { font-size: 12px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+  .step-item-desc { font-size: 10px; color: #64748b; line-height: 1.55; }
+  .step-item-layer {
+    font-family: var(--mono); font-size: 9px; margin-top: 7px;
+    padding: 2px 8px; border-radius: 3px; display: inline-block;
   }
-  .legend-title {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: #4a5568; margin-bottom: 10px;
-  }
-  .legend-items { display: flex; flex-wrap: wrap; gap: 14px; }
-  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #4a5568; }
-  .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -252,9 +298,9 @@
 
   <!-- HEADER -->
   <div class="header">
-    <div class="header-eyebrow">Platform Overview — 2026.03 最新版</div>
+    <div class="header-eyebrow">Platform Overview — 2026.03 v4</div>
     <h1>Teleport-Cloud　サービス全体像</h1>
-    <p>デバイス・プラットフォーム・アプリ・ユーザー・外部連携の5層構造。全8アプリが共通基盤の上で稼働し、データが統合されることで組織の学習基盤として機能する。</p>
+    <p>人間ユーザーとAIエージェントの両方がロボットを操作・活用できる統合プラットフォーム。Layer 2にAI基盤を追加し、段階的なAI自律化に対応する構造へ進化。</p>
   </div>
 
   <div class="diagram">
@@ -265,85 +311,116 @@
       <div class="layer-title">🤖 デバイス（ロボット）</div>
       <div class="layer-desc">現場に存在する物理デバイス。Teleport-Cloudに接続することで遠隔操作・自律動作・データ送信が可能になる。</div>
       <div class="chips">
-        <div class="chip">🦾 temi　自律移動ロボット</div>
-        <div class="chip">📷 kubi　固定型デスクロボット</div>
-        <div class="chip">📱 Telepii　小型ロボット</div>
-        <div class="chip">📡 IoTセンサー類</div>
-        <div class="chip">🎥 HDカメラ（外部接続）</div>
-        <div class="chip">💻 固定タブレット・端末</div>
+        <span class="chip" style="background:#ebf8ff;color:#0077b6;border-color:#bee3f8;">🦾 temi　自律移動ロボット</span>
+        <span class="chip" style="background:#ebf8ff;color:#0077b6;border-color:#bee3f8;">📷 kubi　固定型デスクロボット</span>
+        <span class="chip" style="background:#ebf8ff;color:#0077b6;border-color:#bee3f8;">📱 Telepii　小型ロボット</span>
+        <span class="chip" style="background:#ebf8ff;color:#0077b6;border-color:#bee3f8;">📡 IoTセンサー類</span>
+        <span class="chip" style="background:#ebf8ff;color:#0077b6;border-color:#bee3f8;">🎥 HDカメラ（外部接続）</span>
       </div>
     </div>
 
-    <!-- ARROW -->
+    <!-- ARROW 1 -->
     <div class="arrow">
-      <svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#94a3b8" stroke-width="2"/><polygon points="6,18 1,10 11,10" fill="#94a3b8"/></svg>
+      <svg width="10" height="16" viewBox="0 0 10 16"><line x1="5" y1="0" x2="5" y2="10" stroke="#94a3b8" stroke-width="1.5"/><polygon points="5,16 1,9 9,9" fill="#94a3b8"/></svg>
       <span>映像・位置情報・操作データ・センサーデータ・音声</span>
-      <svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#94a3b8" stroke-width="2"/><polygon points="6,18 1,10 11,10" fill="#94a3b8"/></svg>
+      <svg width="10" height="16" viewBox="0 0 10 16"><line x1="5" y1="0" x2="5" y2="10" stroke="#94a3b8" stroke-width="1.5"/><polygon points="5,16 1,9 9,9" fill="#94a3b8"/></svg>
     </div>
 
-    <!-- LAYER 2: PLATFORM -->
-    <div class="layer l-platform">
-      <div class="layer-tag">Layer 2 — Platform Core</div>
-      <div class="layer-title">☁️ Teleport-Cloud</div>
-      <div class="layer-desc">全デバイス・全アプリ・全ユーザーをつなぐ共通基盤。Google WorkspaceにおけるGoogleアカウント＋共通データレイヤーに相当するOS層。</div>
-
-      <div class="platform-grid">
-        <div class="platform-item">
-          <div class="platform-item-name">🔐 認証・権限管理</div>
-          <div class="platform-item-desc">組織／管理者／ユーザー／ゲストの4階層管理</div>
-        </div>
-        <div class="platform-item">
-          <div class="platform-item-name">📋 デバイス管理</div>
-          <div class="platform-item-desc">ロボットの登録・稼働状態・所属組織の管理</div>
-        </div>
-        <div class="platform-item">
-          <div class="platform-item-name">🗄️ データ基盤</div>
-          <div class="platform-item-desc">映像・ログ・会話・位置情報の一元保存</div>
-        </div>
-        <div class="platform-item">
-          <div class="platform-item-name">📡 API基盤</div>
-          <div class="platform-item-desc">Push（Webhook）／Pull（REST）の双方向API</div>
-        </div>
-        <div class="platform-item">
-          <div class="platform-item-name">🏢 組織管理</div>
-          <div class="platform-item-desc">複数組織・複数拠点の横断管理</div>
-        </div>
-        <div class="platform-item">
-          <div class="platform-item-name">📊 管理ダッシュボード</div>
-          <div class="platform-item-desc">稼働状況・ログ・レポートの一覧</div>
-        </div>
+    <!-- LAYER 2: PLATFORM (with sub-layers) -->
+    <div class="l-platform-wrapper">
+      <div class="platform-header">
+        <div class="platform-tag">Layer 2 — Platform Core</div>
+        <div class="platform-title">☁️ Teleport-Cloud</div>
+        <div class="platform-desc">全デバイス・全アプリ・全ユーザー・全AIエージェントをつなぐ共通プラットフォーム。人間とAIの両方がロボットにアクセスする基盤。</div>
       </div>
 
-      <div class="livekit-bar">
-        <span class="lk-label">LiveKit（稼働中）</span>
-        <span>通話・音声・会話ログの共通基盤 — iPresence-Agent / Telopotalk / AvatarLink で共有</span>
+      <div class="sub-grid">
+
+        <!-- 2-A: Core Infrastructure -->
+        <div class="sub-layer sub-2a">
+          <div class="sub-layer-tag">2-A　Core Infrastructure</div>
+          <div class="sub-layer-title">共通基盤</div>
+          <div class="sub-layer-desc">全アプリ・全ユーザー・全AIエージェントが共有するOS層。認証・デバイス管理・データ蓄積・通信基盤。</div>
+          <div class="sub-chips">
+            <span class="sub-chip sub-2a">Identity &amp; Auth</span>
+            <span class="sub-chip sub-2a">Device Registry</span>
+            <span class="sub-chip sub-2a">Unified Data Store</span>
+            <span class="sub-chip sub-2a">Media Server（LiveKit）</span>
+            <span class="sub-chip sub-2a">Event Bus</span>
+            <span class="sub-chip sub-2a">Admin Dashboard</span>
+          </div>
+        </div>
+
+        <!-- 2-B: AI Infrastructure -->
+        <div class="sub-layer sub-2b">
+          <div class="sub-layer-tag">2-B　AI Infrastructure</div>
+          <div class="sub-layer-title">AI実行基盤</div>
+          <div class="sub-layer-desc">iPresenceが作り込むAI実行環境。Guide・Field Log等のAgentが利用するLLM・プロンプト・ログ管理。</div>
+          <div class="sub-chips">
+            <span class="sub-chip sub-2b">LLMランタイム（モデル管理・切替）</span>
+            <span class="sub-chip sub-2b">プロンプト・コンテキスト管理</span>
+            <span class="sub-chip sub-2b">使用量・コスト管理</span>
+            <span class="sub-chip sub-2b">AIログ・トレース</span>
+          </div>
+          <div class="step-badge step-1">1st Step：iPresence Agent強化</div>
+        </div>
+
+        <!-- 2-C: AI Agent Gateway -->
+        <div class="sub-layer sub-2c">
+          <div class="sub-layer-tag">2-C　AI Agent Gateway</div>
+          <div class="sub-layer-title">外部AIエージェント接続層</div>
+          <div class="sub-layer-desc">外部AIエージェント・チャットツール・顧客システムがロボットをツールとして呼び出す入口。MCP Server対応。</div>
+          <div class="sub-chips">
+            <span class="sub-chip sub-2c">APIキー発行・権限管理</span>
+            <span class="sub-chip sub-2c">MCP Server（Tool公開）</span>
+            <span class="sub-chip sub-2c">Teams / Slack 連携</span>
+            <span class="sub-chip sub-2c">Webhook受信</span>
+          </div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;">
+            <div class="step-badge step-2">2nd Step：外部AI・チャットツール連携</div>
+            <div class="step-badge step-3">3rd Step：顧客APIアクセス</div>
+          </div>
+        </div>
+
+        <!-- 2-D: Knowledge Store -->
+        <div class="sub-layer sub-2d">
+          <div class="sub-layer-tag">2-D　Knowledge Store</div>
+          <div class="sub-layer-title">知識・文脈データ層</div>
+          <div class="sub-layer-desc">AIが自律判断するための参照データ群。2-Bと2-Cの両方から参照される。RAG管理の実体。</div>
+          <div class="sub-chips">
+            <span class="sub-chip sub-2d">施設マップ・フロア情報</span>
+            <span class="sub-chip sub-2d">業務マニュアル・FAQ</span>
+            <span class="sub-chip sub-2d">ルール・制約定義</span>
+            <span class="sub-chip sub-2d">過去ログ・行動履歴（RAG）</span>
+          </div>
+        </div>
+
       </div>
 
-      <div class="ownership-bar">
+      <!-- Ownership bar -->
+      <div style="margin-top:12px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.18);border-radius:8px;padding:8px 14px;font-size:10px;color:#7dd3fc;font-family:var(--mono);display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
         <span>所有モデル:</span>
-        <span>契約（組織）</span><span class="sep">→</span>
-        <span>デバイス</span><span class="sep">→</span>
-        <span>管理者 / ユーザー / ゲスト</span><span class="sep">→</span>
+        <span>契約（組織）</span><span style="color:rgba(0,212,255,0.35);">→</span>
+        <span>デバイス</span><span style="color:rgba(0,212,255,0.35);">→</span>
+        <span>管理者 / ユーザー / ゲスト / AIエージェント</span><span style="color:rgba(0,212,255,0.35);">→</span>
         <span>稼働 Agent</span>
       </div>
     </div>
 
-    <!-- ARROW -->
+    <!-- ARROW 2 -->
     <div class="arrow">
-      <svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#94a3b8" stroke-width="2"/><polygon points="6,18 1,10 11,10" fill="#94a3b8"/></svg>
+      <svg width="10" height="16" viewBox="0 0 10 16"><line x1="5" y1="0" x2="5" y2="10" stroke="#94a3b8" stroke-width="1.5"/><polygon points="5,16 1,9 9,9" fill="#94a3b8"/></svg>
       <span>Teleport-Cloud 上で動作するアプリケーション層（全8アプリ）</span>
-      <svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#94a3b8" stroke-width="2"/><polygon points="6,18 1,10 11,10" fill="#94a3b8"/></svg>
+      <svg width="10" height="16" viewBox="0 0 10 16"><line x1="5" y1="0" x2="5" y2="10" stroke="#94a3b8" stroke-width="1.5"/><polygon points="5,16 1,9 9,9" fill="#94a3b8"/></svg>
     </div>
 
     <!-- LAYER 3: APPS -->
     <div class="layer l-apps">
       <div class="layer-tag">Layer 3 — Applications</div>
       <div class="layer-title">⚙️ アプリケーション群</div>
-      <div class="layer-desc">Teleport-Cloud 上で動く3カテゴリ・8アプリ。共通の認証・データ基盤・LiveKitを利用し、導入が増えるほど横断データが厚くなる。</div>
+      <div class="layer-desc">Teleport-Cloud 上で動く3カテゴリ・8アプリ。2-B（AI実行基盤）と2-D（Knowledge Store）を活用し、AI Agentとして自律稼働する。</div>
 
       <div class="app-groups">
-
-        <!-- iPresence-Agent -->
         <div>
           <div class="app-group-label gh-agent">🤖 iPresence-Agent　— ロボット業務アプリ</div>
           <div class="app-cards">
@@ -370,13 +447,12 @@
           </div>
         </div>
 
-        <!-- Space Viewer -->
         <div>
-          <div class="app-group-label gh-viewer">🗺️ Space Viewer　— 3D空間可視化アプリ（Matterport SDK）</div>
+          <div class="app-group-label gh-viewer">🗺️ Space Viewer　— 3D空間可視化アプリ</div>
           <div class="app-cards">
             <div class="app-card ac-fieldview">
               <div class="app-card-name">🏗️ Field View</div>
-              <div class="app-card-desc">工場・現場の3D可視化。ロボット位置リアルタイム表示・テレポートリンク・Field Log連携</div>
+              <div class="app-card-desc">工場・現場の3D可視化。ロボット位置リアルタイム表示・テレポートリンク</div>
               <div class="app-card-badge">開発計画中</div>
             </div>
             <div class="app-card ac-itour">
@@ -387,7 +463,6 @@
           </div>
         </div>
 
-        <!-- Communication -->
         <div>
           <div class="app-group-label gh-comm">📹 Communication　— ビデオ通話アプリ（LiveKit共通基盤）</div>
           <div class="app-cards">
@@ -398,27 +473,26 @@
             </div>
             <div class="app-card ac-avatarlink">
               <div class="app-card-name">🎭 AvatarLink</div>
-              <div class="app-card-desc">temi・kubi・Telepii 多拠点同時接続。ハイブリッド授業・複数ロボット独立制御</div>
+              <div class="app-card-desc">temi・kubi・Telepii 多拠点同時接続。ハイブリッド授業・複数ロボット制御</div>
               <div class="app-card-badge">稼働中</div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
-    <!-- ARROW -->
+    <!-- ARROW 3 -->
     <div class="arrow">
-      <svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#94a3b8" stroke-width="2"/><polygon points="6,18 1,10 11,10" fill="#94a3b8"/></svg>
-      <span>1アカウントで全デバイス・全アプリにアクセス</span>
-      <svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#94a3b8" stroke-width="2"/><polygon points="6,18 1,10 11,10" fill="#94a3b8"/></svg>
+      <svg width="10" height="16" viewBox="0 0 10 16"><line x1="5" y1="0" x2="5" y2="10" stroke="#94a3b8" stroke-width="1.5"/><polygon points="5,16 1,9 9,9" fill="#94a3b8"/></svg>
+      <span>1アカウントで全デバイス・全アプリにアクセス（人間 / AIエージェント共通）</span>
+      <svg width="10" height="16" viewBox="0 0 10 16"><line x1="5" y1="0" x2="5" y2="10" stroke="#94a3b8" stroke-width="1.5"/><polygon points="5,16 1,9 9,9" fill="#94a3b8"/></svg>
     </div>
 
     <!-- LAYER 4: USERS -->
     <div class="layer l-users">
-      <div class="layer-tag">Layer 4 — Users</div>
-      <div class="layer-title">👥 ユーザー（権限階層）</div>
-      <div class="layer-desc">1つのアカウントで複数デバイス・複数アプリを操作。組織レベルとデバイスレベルの2階層で権限を管理。新しいアプリ追加時も再設定不要。</div>
+      <div class="layer-tag">Layer 4 — Users &amp; AI Agents</div>
+      <div class="layer-title">👥 ユーザー / AIエージェント（アクセス主体）</div>
+      <div class="layer-desc">人間ユーザーは権限階層に従いアクセス。AIエージェントは2-CのAPIキー・MCP経由でアクセス。どちらも同一のデバイス・データ基盤を利用する。</div>
       <div class="user-row">
         <div class="user-card" style="background:#fff5f5;border-color:#fed7d7;">
           <div class="user-card-name" style="color:#c53030;">iPresence（スーパー管理者）</div>
@@ -426,7 +500,7 @@
         </div>
         <div class="user-card" style="background:#fffaf0;border-color:#fbd38d;">
           <div class="user-card-name" style="color:#c05621;">組織管理者（Org Admin）</div>
-          <div class="user-card-desc">契約管理・デバイス登録・ユーザー招待・請求</div>
+          <div class="user-card-desc">契約管理・デバイス登録・ユーザー招待・APIキー管理</div>
         </div>
         <div class="user-card" style="background:#ebf8ff;border-color:#90cdf4;">
           <div class="user-card-name" style="color:#2b6cb0;">ユーザー（Org User）</div>
@@ -436,27 +510,31 @@
           <div class="user-card-name" style="color:#276749;">ゲスト（Guest）</div>
           <div class="user-card-desc">外部専門家・他組織ユーザーの一時アクセス</div>
         </div>
+        <div class="user-card" style="background:#120d20;border-color:#4a2d8e;">
+          <div class="user-card-name" style="color:#a78bfa;">AIエージェント（API / MCP）</div>
+          <div class="user-card-desc">外部AI・顧客システムがAPIキー経由でロボットをツールとして利用</div>
+        </div>
       </div>
     </div>
 
-    <!-- ARROW -->
+    <!-- ARROW 4 -->
     <div class="arrow">
-      <svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#94a3b8" stroke-width="2"/><polygon points="6,18 1,10 11,10" fill="#94a3b8"/></svg>
-      <span>API連携（Push: Webhook　/　Pull: REST API）</span>
-      <svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#94a3b8" stroke-width="2"/><polygon points="6,18 1,10 11,10" fill="#94a3b8"/></svg>
+      <svg width="10" height="16" viewBox="0 0 10 16"><line x1="5" y1="0" x2="5" y2="10" stroke="#94a3b8" stroke-width="1.5"/><polygon points="5,16 1,9 9,9" fill="#94a3b8"/></svg>
+      <span>Push: Webhook　/　Pull: REST API　/　MCP（外部AIエージェント）</span>
+      <svg width="10" height="16" viewBox="0 0 10 16"><line x1="5" y1="0" x2="5" y2="10" stroke="#94a3b8" stroke-width="1.5"/><polygon points="5,16 1,9 9,9" fill="#94a3b8"/></svg>
     </div>
 
     <!-- LAYER 5: EXTERNAL -->
     <div class="layer l-external">
       <div class="layer-tag">Layer 5 — External Integration</div>
       <div class="layer-title">🔌 外部システム連携</div>
-      <div class="layer-desc">Teleport-Cloud が保有するデータを顧客の既存システムへ提供。ロボットのデータが業務基幹システムに自然に組み込まれる。</div>
+      <div class="layer-desc">Teleport-Cloudが保有するデータを顧客の既存システムへ提供。AIエージェント経由での連携も含む。</div>
       <div class="ext-cols">
         <div class="ext-col">
           <div class="ext-col-label">Push — Webhook（イベント駆動）</div>
           <div class="ext-chips">
             <div class="ext-chip">🚨 異常検知アラート → 警備・BMS・Slack</div>
-            <div class="ext-chip">🤖 ロボット状態変化 → 稼働開始・停止・エラー通知</div>
+            <div class="ext-chip">🤖 ロボット状態変化 → 監視システム通知</div>
             <div class="ext-chip">💬 会話終了イベント → CRM自動登録</div>
           </div>
         </div>
@@ -464,8 +542,16 @@
           <div class="ext-col-label">Pull — REST API（定期取得）</div>
           <div class="ext-chips">
             <div class="ext-chip">📍 位置情報履歴 → 施設管理・BIM</div>
-            <div class="ext-chip">📋 操作・通話ログ → 勤怠・業務レポート</div>
+            <div class="ext-chip">📋 操作・通話ログ → ERP・業務レポート</div>
             <div class="ext-chip">📊 分析データ → BIツール・行動解析</div>
+          </div>
+        </div>
+        <div class="ext-col">
+          <div class="ext-col-label">MCP — AI Agent連携</div>
+          <div class="ext-chips">
+            <div class="ext-chip">🧠 Claude / GPT → ロボットをToolとして呼出</div>
+            <div class="ext-chip">💼 Teams / Slack → チャットからロボット操作</div>
+            <div class="ext-chip">🏭 顧客AIシステム → 自律判断でロボット制御</div>
           </div>
         </div>
       </div>
@@ -473,50 +559,28 @@
 
   </div>
 
-  <!-- REVENUE ESTIMATE -->
-  <div class="revenue-box">
-    <div class="revenue-title">売上規模試算（2030年・全8アプリ稼働・国内本格展開時）</div>
-    <div class="revenue-grid">
-      <div class="revenue-item">
-        <div class="revenue-item-label">RaaS（レンタル＋更新ライセンス）</div>
-        <div class="revenue-item-value">7〜10億円</div>
-        <div class="revenue-item-desc">temi 1,000台稼働想定。レンタル＋4年目以降の更新収益</div>
+  <!-- AI STEP LEGEND -->
+  <div class="step-legend">
+    <div class="step-legend-title">AI自律化　3ステップロードマップ</div>
+    <div class="step-legend-grid">
+      <div class="step-item">
+        <div class="step-item-num" style="color:var(--2b-color);">1st Step</div>
+        <div class="step-item-title">iPresence Agentの強化</div>
+        <div class="step-item-desc">Guide・Field Log等のAgentが2-B（AI実行基盤）と2-D（Knowledge Store）を活用し、より高度な自律判断・対話を実現する。iPresence単独で完結。</div>
+        <div class="step-item-layer" style="background:rgba(167,139,250,0.15);color:var(--2b-color);">2-B AI Infrastructure + 2-D Knowledge Store</div>
       </div>
-      <div class="revenue-item">
-        <div class="revenue-item-label">アプリライセンス（年間定額）</div>
-        <div class="revenue-item-value">5〜15億円</div>
-        <div class="revenue-item-desc">組織単位70万円→台単位150万円への移行で上振れ</div>
+      <div class="step-item">
+        <div class="step-item-num" style="color:var(--2c-color);">2nd Step</div>
+        <div class="step-item-title">外部AI・チャットツール連携</div>
+        <div class="step-item-desc">Teams・Slackからの指示や外部AIエージェントが、MCP経由でロボットを自発的に操作・情報収集する。2-Dの知識を参照して自律判断。</div>
+        <div class="step-item-layer" style="background:rgba(0,212,255,0.1);color:var(--2c-color);">2-C AI Agent Gateway（MCP対応）</div>
       </div>
-      <div class="revenue-item">
-        <div class="revenue-item-label">契約開発（カスタマイズ）</div>
-        <div class="revenue-item-value">1.5〜2億円</div>
-        <div class="revenue-item-desc">120万円/人月 × 年間30件想定</div>
+      <div class="step-item">
+        <div class="step-item-num" style="color:#7dd3fc;">3rd Step</div>
+        <div class="step-item-title">顧客側からのAPIアクセス</div>
+        <div class="step-item-desc">顧客が自社のシステム・AIからTeleport-CloudのAPIを直接呼び出し、ロボットを業務フローに完全統合する。Teleport-Cloudが社会インフラ化する段階。</div>
+        <div class="step-item-layer" style="background:rgba(0,212,255,0.08);color:#7dd3fc;">2-C APIキー・権限管理</div>
       </div>
-      <div class="revenue-item">
-        <div class="revenue-item-label">Space Viewer / iTOUR等</div>
-        <div class="revenue-item-value">〜0.5億円</div>
-        <div class="revenue-item-desc">SaaS型。2030年時点では補完的位置づけ</div>
-      </div>
-    </div>
-    <div class="revenue-total">
-      <div class="revenue-total-label">合計（年間売上試算）</div>
-      <div class="revenue-total-value">約 14〜20 億円</div>
-    </div>
-    <div class="revenue-note">
-      ※ ライセンスが台単位に移行完了した場合、アプリ単体で最大15億円（1,000台×150万円）となり、RaaSと合わせて<strong style="color:#7dd3fc;">25〜30億円</strong>の射程に入る。<br>
-      ※ ARR比率（レンタル＋ライセンス）が売上の60%以上になることが、IPO時のPSR 4〜5倍評価の条件。
-    </div>
-  </div>
-
-  <!-- LEGEND -->
-  <div class="legend">
-    <div class="legend-title">凡例</div>
-    <div class="legend-items">
-      <div class="legend-item"><div class="legend-dot" style="background:#0077b6;"></div>Layer 1–2：ハードウェアとプラットフォーム基盤</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#276749;"></div>Layer 3：アプリケーション群（3カテゴリ・8アプリ）</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#6b46c1;"></div>Layer 4：ユーザー（1アカウントで全機能にアクセス）</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#c53030;"></div>Layer 5：外部連携（Push / Pull 双方向API）</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#00ff88;"></div>LiveKit：通話・音声・会話ログの共通基盤（稼働中）</div>
     </div>
   </div>
 
